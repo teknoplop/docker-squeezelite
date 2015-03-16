@@ -7,7 +7,7 @@ RUN apt-get install squeezelite alsa-utils --no-install-recommends -y
 
 # avoid running as root. Add user to audio group for access to soundcard
 RUN useradd -G audio squeezelite
-RUN mkdir /home/squeezelite
+RUN mkdir -p /home/squeezelite/data
 RUN chown -R squeezelite /home/squeezelite
 
 USER squeezelite
@@ -16,5 +16,5 @@ USER squeezelite
 # watch -n 5 cat /proc/asound/card0/pcm0p/sub0/hw_params
 COPY asoundrc /home/squeezelite/.asoundrc
 
-CMD /usr/bin/squeezelite -n `hostname`
+CMD [ "/usr/bin/squeezelite", "-d", "all=info", "-f", "/home/squeezelite/data/squeezelite.log", "-N", "/home/squeezelite/data/name" ]
 
